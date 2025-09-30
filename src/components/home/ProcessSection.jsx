@@ -37,11 +37,11 @@ const processSteps = [
   }
 ];
 
-function ProcessStep({ step, index, onInView }) {
+function ProcessStep({ step, index, onInView, isActive }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { 
-    margin: "-40% 0px -40% 0px",
-    amount: 0.5
+    margin: "-30% 0px -30% 0px",
+    amount: 0.6
   });
 
   React.useEffect(() => {
@@ -63,7 +63,17 @@ function ProcessStep({ step, index, onInView }) {
       className="min-h-[400px] flex items-center"
     >
       <motion.div
-        className="relative bg-slate-800/80 backdrop-blur-sm rounded-2xl p-8 border-2 border-slate-700/50 transition-all duration-300 hover:shadow-xl hover:border-red-500/50 w-full"
+        className={`relative bg-slate-800/80 backdrop-blur-sm rounded-2xl p-8 border-2 transition-all duration-500 w-full ${
+          isActive 
+            ? 'border-red-500/60 shadow-2xl shadow-red-500/10' 
+            : 'border-slate-700/50 hover:border-red-500/50 hover:shadow-xl'
+        }`}
+        animate={{
+          borderColor: isActive ? "rgba(239, 68, 68, 0.6)" : "rgba(71, 85, 105, 0.5)",
+          boxShadow: isActive 
+            ? "0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 30px rgba(220, 38, 38, 0.15)"
+            : "0 10px 25px -5px rgba(0, 0, 0, 0.1)"
+        }}
         whileHover={{
           borderColor: "rgba(239, 68, 68, 0.5)",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(220, 38, 38, 0.2)",
@@ -146,9 +156,9 @@ export default function ProcessSection() {
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left Column - Sticky Image */}
-          <div className="lg:sticky lg:top-32 h-[600px]">
+          <div className="lg:sticky lg:top-24 h-[700px]">
             <motion.div 
-              className="relative h-full rounded-2xl overflow-hidden shadow-2xl"
+              className="relative h-full rounded-2xl overflow-hidden shadow-2xl border-2 border-slate-700/30"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -158,26 +168,31 @@ export default function ProcessSection() {
                 src={processSteps[activeStep].imageUrl}
                 alt={processSteps[activeStep].title}
                 className="w-full h-full object-cover"
-                initial={{ opacity: 0, scale: 1.1 }}
+                initial={{ opacity: 0, scale: 1.05 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-slate-900/20"></div>
               
               {/* Active Step Indicator */}
               <motion.div 
-                className="absolute bottom-8 left-8 bg-slate-900/80 backdrop-blur-sm rounded-xl p-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                key={activeStep}
+                className="absolute bottom-8 left-8 bg-slate-900/90 backdrop-blur-md rounded-xl p-6 border border-red-500/20"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center">
+                  <motion.div 
+                    className="w-12 h-12 rounded-lg bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg"
+                    whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
+                    transition={{ duration: 0.3 }}
+                  >
                     {React.createElement(processSteps[activeStep].icon, { className: "w-6 h-6 text-white" })}
-                  </div>
+                  </motion.div>
                   <div>
-                    <p className="text-slate-400 text-sm">Step {processSteps[activeStep].step}</p>
+                    <p className="text-red-400 text-sm font-medium">Step {processSteps[activeStep].step}</p>
                     <p className="text-white font-bold text-xl">{processSteps[activeStep].title}</p>
                   </div>
                 </div>
@@ -193,6 +208,7 @@ export default function ProcessSection() {
                 step={step} 
                 index={index}
                 onInView={setActiveStep}
+                isActive={activeStep === index}
               />
             ))}
           </div>
