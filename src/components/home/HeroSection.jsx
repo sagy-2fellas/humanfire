@@ -10,6 +10,7 @@ export default function HeroSection() {
   const [displayedText, setDisplayedText] = useState("");
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
+  const [showVideo, setShowVideo] = useState(false);
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const y = useTransform(scrollY, [0, 300], [0, 100]);
@@ -154,25 +155,37 @@ export default function HeroSection() {
           </div>
         </motion.div>
 
-        {/* Right Video/Image */}
+        {/* Right Media (lazy): show poster first; load iframe on interaction */}
         <div className="hidden lg:block relative overflow-hidden">
           <motion.div
             initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, delay: 0.3 }}
           >
-            <iframe
-              src="https://www.youtube.com/embed/eO_yPBb9xcY?autoplay=1&mute=1&loop=1&playlist=eO_yPBb9xcY&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
-              title="Background Video"
-              className="absolute -top-16 -left-16 w-[calc(100%+128px)] h-[calc(100%+128px)]"
-              style={{ border: 'none', pointerEvents: 'none' }}
-              allow="autoplay; encrypted-media">
-            </iframe>
-            <img
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68d58d25391c1a6fec6b2bda/1b719d5d7_AdobeStock_1316002280.jpg"
-              alt="Hero Background"
-              className="absolute inset-0 w-full h-full object-cover object-right"
-              style={{ zIndex: -1 }} />
+            {showVideo ? (
+              <iframe
+                src="https://www.youtube.com/embed/eO_yPBb9xcY?autoplay=1&mute=1&loop=1&playlist=eO_yPBb9xcY&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+                title="Background Video"
+                className="absolute -top-16 -left-16 w-[calc(100%+128px)] h-[calc(100%+128px)]"
+                style={{ border: 'none' }}
+                allow="autoplay; encrypted-media"
+              />
+            ) : (
+              <button
+                type="button"
+                aria-label="Play background video"
+                className="absolute inset-0 w-full h-full"
+                onClick={() => setShowVideo(true)}
+                style={{ cursor: 'pointer' }}
+              >
+                <img
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/68d58d25391c1a6fec6b2bda/1b719d5d7_AdobeStock_1316002280.jpg"
+                  alt="Hero Background"
+                  className="absolute inset-0 w-full h-full object-cover object-right"
+                  loading="lazy"
+                />
+              </button>
+            )}
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-l from-transparent to-slate-900"></div>
         </div>
