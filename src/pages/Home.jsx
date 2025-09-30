@@ -12,7 +12,7 @@ import { createPageUrl } from "@/utils";
 
 import HeroSection from "../components/home/HeroSection";
 import StatsSection from "../components/home/StatsSection";
-import InteractiveFrameworkSection from "../components/home/InteractiveFrameworkSection";
+import InteractiveFrameworkSection from "../components/home/InteractiveFrameworksection";
 import ProcessSection from "../components/home/ProcessSection";
 import ExpertiseSection from "../components/home/ExpertiseSection";
 import TestimonialSection from "../components/home/TestimonialSection";
