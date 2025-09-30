@@ -162,11 +162,14 @@ export default function ProcessSection() {
         </motion.div>
 
         {/* Two Column Layout with Sticky Image */}
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-16 items-start min-h-[2000px]">
           {/* Left Column - Sticky Image */}
-          <div className="lg:sticky lg:top-24 h-[700px]">
+          <div 
+            className="lg:sticky lg:top-32 lg:self-start h-[600px] w-full"
+            style={{ position: 'sticky', top: '8rem' }}
+          >
             <motion.div 
-              className="relative h-full rounded-2xl overflow-hidden shadow-2xl border-2 border-slate-700/30"
+              className="relative h-full w-full rounded-2xl overflow-hidden shadow-2xl border-2 border-slate-700/30"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -209,7 +212,7 @@ export default function ProcessSection() {
           </div>
 
           {/* Right Column - Process Steps */}
-          <div className="space-y-8">
+          <div className="space-y-16 lg:space-y-24">
             {processSteps.map((step, index) => (
               <ProcessStep 
                 key={index} 
