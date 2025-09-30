@@ -68,122 +68,57 @@ function ProcessStep({ step, index, onInView, isActive }) {
         duration: 0.6,
         ease: [0.25, 0.46, 0.45, 0.94]
       }}
-      className="min-h-[500px] flex items-center"
+      className="min-h-[400px] flex items-center"
     >
-      <div className="grid lg:grid-cols-2 gap-8 w-full items-center">
-        {/* Left side - Screenshot/Mockup */}
-        <motion.div
-          className="order-2 lg:order-1"
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <div className="relative">
-            {/* Phone mockup container */}
-            <div className="relative mx-auto w-[280px] h-[500px] bg-slate-800 rounded-[3rem] p-2 shadow-2xl">
-              <div className="w-full h-full bg-slate-900 rounded-[2.5rem] overflow-hidden relative">
-                {/* Status bar */}
-                <div className="h-8 bg-slate-800 flex items-center justify-between px-6 text-white text-xs">
-                  <span>9:41</span>
-                  <div className="flex gap-1">
-                    <div className="w-4 h-2 bg-white rounded-sm"></div>
-                    <div className="w-4 h-2 bg-white rounded-sm"></div>
-                  </div>
-                </div>
-                
-                {/* App screenshot */}
-                <motion.img
-                  src={step.screenshotUrl}
-                  alt={`${step.title} interface`}
-                  className="w-full h-full object-cover"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                />
-                
-                {/* Overlay with step info */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/90 to-transparent p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center">
-                      <step.icon className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-white font-semibold text-sm">{step.title}</p>
-                      <p className="text-slate-300 text-xs">Step {step.step}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Floating description */}
-            <motion.div
-              className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900/90 backdrop-blur-md rounded-xl p-4 border border-slate-700/50 shadow-xl max-w-[320px]"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <p className="text-slate-300 text-sm text-center">
-                {step.mockupText}
-              </p>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Right side - Content */}
-        <motion.div
-          className="order-1 lg:order-2"
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+      <motion.div
+        className={`relative bg-slate-800/80 backdrop-blur-sm rounded-2xl p-8 border-2 transition-all duration-500 w-full ${
+          isActive 
+            ? 'border-red-500/60 shadow-2xl shadow-red-500/10' 
+            : 'border-slate-700/50 hover:border-red-500/50 hover:shadow-xl'
+        }`}
+        animate={{
+          borderColor: isActive ? "rgba(239, 68, 68, 0.6)" : "rgba(71, 85, 105, 0.5)",
+          boxShadow: isActive 
+            ? "0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 30px rgba(220, 38, 38, 0.15)"
+            : "0 10px 25px -5px rgba(0, 0, 0, 0.1)"
+        }}
+        whileHover={{
+          borderColor: "rgba(239, 68, 68, 0.5)",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(220, 38, 38, 0.2)",
+          transition: { duration: 0.3 }
+        }}
+      >
+        <div className="flex items-center justify-between mb-6">
           <motion.div
-            className={`relative bg-slate-800/80 backdrop-blur-sm rounded-2xl p-8 border-2 transition-all duration-500 w-full ${
-              isActive 
-                ? 'border-red-500/60 shadow-2xl shadow-red-500/10' 
-                : 'border-slate-700/50 hover:border-red-500/50 hover:shadow-xl'
-            }`}
-            animate={{
-              borderColor: isActive ? "rgba(239, 68, 68, 0.6)" : "rgba(71, 85, 105, 0.5)",
-              boxShadow: isActive 
-                ? "0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 30px rgba(220, 38, 38, 0.15)"
-                : "0 10px 25px -5px rgba(0, 0, 0, 0.1)"
+            className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+            style={{
+              background: "linear-gradient(135deg, rgb(220 38 38), rgb(239 68 68), rgb(185 28 28))"
             }}
             whileHover={{
-              borderColor: "rgba(239, 68, 68, 0.5)",
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(220, 38, 38, 0.2)",
-              transition: { duration: 0.3 }
+              scale: 1.1,
+              rotate: [0, -5, 5, 0],
+              boxShadow: "0 0 25px rgba(220, 38, 38, 0.4)",
+              transition: { duration: 0.4 }
             }}
           >
-            <div className="flex items-center gap-4 mb-6">
-              <motion.div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
-                style={{
-                  background: "linear-gradient(135deg, rgb(220 38 38), rgb(239 68 68), rgb(185 28 28))"
-                }}
-                whileHover={{
-                  scale: 1.1,
-                  rotate: [0, -5, 5, 0],
-                  boxShadow: "0 0 25px rgba(220, 38, 38, 0.4)",
-                  transition: { duration: 0.4 }
-                }}
-              >
-                <step.icon className="w-8 h-8 text-white" />
-              </motion.div>
-              <div>
-                <span className="text-4xl font-bold text-slate-700">{step.step}</span>
-                <h3 className="text-2xl font-bold text-white">
-                  {step.title}<span className="inline-block w-2 h-2 bg-red-600 rounded-full ml-1 ember-pulse"></span>
-                </h3>
-              </div>
-            </div>
-            
-            <p className="text-slate-300 leading-relaxed text-lg">
-              {step.description}
-            </p>
+            <step.icon className="w-8 h-8 text-white" />
           </motion.div>
-        </motion.div>
-      </div>
+          <motion.span
+            className="text-6xl font-bold text-slate-700 group-hover:text-red-900 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            transition={{ duration: 0.2 }}
+          >
+            {step.step}
+          </motion.span>
+        </div>
+
+        <h3 className="text-3xl font-bold text-white mb-4">
+          {step.title}<span className="inline-block w-2 h-2 bg-red-600 rounded-full ml-1 ember-pulse"></span>
+        </h3>
+        <p className="text-slate-300 leading-relaxed text-lg">
+          {step.description}
+        </p>
+      </motion.div>
     </motion.div>
   );
 }
@@ -226,17 +161,65 @@ export default function ProcessSection() {
           </p>
         </motion.div>
 
-        {/* Process Steps with Individual Mockups */}
-        <div className="space-y-24">
-          {processSteps.map((step, index) => (
-            <ProcessStep 
-              key={index} 
-              step={step} 
-              index={index}
-              onInView={setActiveStep}
-              isActive={activeStep === index}
-            />
-          ))}
+        {/* Two Column Layout with Sticky Image */}
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left Column - Sticky Image */}
+          <div className="lg:sticky lg:top-24 h-[700px]">
+            <motion.div 
+              className="relative h-full rounded-2xl overflow-hidden shadow-2xl border-2 border-slate-700/30"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <motion.img
+                key={activeStep}
+                src={processSteps[activeStep].imageUrl}
+                alt={processSteps[activeStep].title}
+                className="w-full h-full object-cover"
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-slate-900/20"></div>
+              
+              {/* Active Step Indicator */}
+              <motion.div 
+                key={activeStep}
+                className="absolute bottom-8 left-8 bg-slate-900/90 backdrop-blur-md rounded-xl p-6 border border-red-500/20"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <div className="flex items-center gap-4">
+                  <motion.div 
+                    className="w-12 h-12 rounded-lg bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg"
+                    whileHover={{ scale: 1.1, rotate: [0, -5, 5, 0] }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {React.createElement(processSteps[activeStep].icon, { className: "w-6 h-6 text-white" })}
+                  </motion.div>
+                  <div>
+                    <p className="text-red-400 text-sm font-medium">Step {processSteps[activeStep].step}</p>
+                    <p className="text-white font-bold text-xl">{processSteps[activeStep].title}</p>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Right Column - Process Steps */}
+          <div className="space-y-8">
+            {processSteps.map((step, index) => (
+              <ProcessStep 
+                key={index} 
+                step={step} 
+                index={index}
+                onInView={setActiveStep}
+                isActive={activeStep === index}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Bottom CTA */}
