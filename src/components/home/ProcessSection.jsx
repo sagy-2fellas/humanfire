@@ -48,8 +48,8 @@ const processSteps = [
 function ProcessStep({ step, index, onInView, isActive }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { 
-    margin: "-30% 0px -30% 0px",
-    amount: 0.6
+    margin: "-50% 0px -50% 0px",
+    amount: 0.5
   });
 
   React.useEffect(() => {
@@ -129,13 +129,34 @@ export default function ProcessSection() {
   const imageRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Use scroll-based positioning instead of CSS sticky
+  // Track when section is in view and when to release the fixed image
+  const [isSectionInView, setIsSectionInView] = useState(false);
+  const [shouldReleaseImage, setShouldReleaseImage] = useState(false);
+
+  // Use scroll-based positioning
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "end start"]
+    offset: ["start center", "end center"]
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+  // Check if section is in view and when to release image
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+        setIsSectionInView(isInView);
+        
+        // Release image when we reach step 04 (Deliver) or end of section
+        const shouldRelease = activeStep === 3 || rect.bottom < window.innerHeight * 0.5;
+        setShouldReleaseImage(shouldRelease);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [activeStep]);
 
   // Cleanup effect
   useEffect(() => {
@@ -195,13 +216,12 @@ export default function ProcessSection() {
               animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
               style={{ 
-                position: 'fixed',
-                top: '8rem',
-                left: '50%',
-                transform: 'translateX(-75%)',
-                width: '45%',
-                maxWidth: '600px',
-                zIndex: 10
+                position: isSectionInView && !shouldReleaseImage ? 'fixed' : 'relative',
+                top: isSectionInView && !shouldReleaseImage ? '8rem' : 'auto',
+                left: isSectionInView && !shouldReleaseImage ? '5%' : 'auto',
+                width: isSectionInView && !shouldReleaseImage ? '45%' : '100%',
+                maxWidth: isSectionInView && !shouldReleaseImage ? '600px' : 'none',
+                zIndex: isSectionInView && !shouldReleaseImage ? 10 : 'auto'
               }}
             >
               <motion.img
@@ -242,7 +262,7 @@ export default function ProcessSection() {
           </div>
 
           {/* Right Column - Process Steps */}
-          <div className="space-y-16 lg:space-y-24 lg:ml-auto lg:w-[45%]">
+          <div className="space-y-16 lg:space-y-24 lg:ml-auto lg:w-[45%] lg:mr-[5%]">
             {processSteps.map((step, index) => (
               <ProcessStep 
                 key={index} 
