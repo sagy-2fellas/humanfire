@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Search, Lightbulb, Cog, TrendingUp, ArrowRight } from "lucide-react";
@@ -126,7 +126,30 @@ function ProcessStep({ step, index, onInView, isActive }) {
 export default function ProcessSection() {
   const [activeStep, setActiveStep] = useState(0);
   const sectionRef = useRef(null);
+  const imageRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+
+  // Use scroll-based positioning instead of CSS sticky
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+
+  // Cleanup effect
+  useEffect(() => {
+    return () => {
+      if (imageRef.current) {
+        imageRef.current.style.position = '';
+        imageRef.current.style.top = '';
+        imageRef.current.style.left = '';
+        imageRef.current.style.transform = '';
+        imageRef.current.style.width = '';
+        imageRef.current.style.zIndex = '';
+      }
+    };
+  }, []);
 
   return (
     <section className="py-24 bg-slate-900 relative overflow-hidden" ref={sectionRef}>
@@ -161,18 +184,25 @@ export default function ProcessSection() {
           </p>
         </motion.div>
 
-        {/* Two Column Layout with Sticky Image */}
-        <div className="grid lg:grid-cols-2 gap-16 items-start min-h-[2000px]">
-          {/* Left Column - Sticky Image */}
-          <div 
-            className="lg:sticky lg:top-32 lg:self-start h-[600px] w-full"
-            style={{ position: 'sticky', top: '8rem' }}
-          >
+        {/* Two Column Layout with Frozen Image */}
+        <div className="grid lg:grid-cols-2 gap-16 items-start relative">
+          {/* Left Column - Frozen Image */}
+          <div className="lg:sticky lg:top-32 h-[600px] w-full">
             <motion.div 
+              ref={imageRef}
               className="relative h-full w-full rounded-2xl overflow-hidden shadow-2xl border-2 border-slate-700/30"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{ 
+                position: 'fixed',
+                top: '8rem',
+                left: '50%',
+                transform: 'translateX(-75%)',
+                width: '45%',
+                maxWidth: '600px',
+                zIndex: 10
+              }}
             >
               <motion.img
                 key={activeStep}
@@ -212,7 +242,7 @@ export default function ProcessSection() {
           </div>
 
           {/* Right Column - Process Steps */}
-          <div className="space-y-16 lg:space-y-24">
+          <div className="space-y-16 lg:space-y-24 lg:ml-auto lg:w-[45%]">
             {processSteps.map((step, index) => (
               <ProcessStep 
                 key={index} 
