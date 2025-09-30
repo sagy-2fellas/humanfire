@@ -16,7 +16,7 @@ import HumanCulture from "./HumanCulture";
 
 import HumanInsight from "./HumanInsight";
 
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 
 const PAGES = {
     
@@ -63,21 +63,33 @@ function PagesContent() {
                     <Route path="/" element={<Home />} />
                 
                 
-                <Route path="/Home" element={<Home />} />
+                {/* canonical, normalized lowercase routes */}
+                <Route path="/home" element={<Home />} />
                 
-                <Route path="/BookDemo" element={<BookDemo />} />
+                <Route path="/bookdemo" element={<BookDemo />} />
                 
-                <Route path="/Services" element={<Services />} />
+                <Route path="/services" element={<Services />} />
                 
-                <Route path="/About" element={<About />} />
+                <Route path="/about" element={<About />} />
                 
-                <Route path="/HumanAssist" element={<HumanAssist />} />
+                <Route path="/humanassist" element={<HumanAssist />} />
                 
-                <Route path="/HumanDesign" element={<HumanDesign />} />
+                <Route path="/humandesign" element={<HumanDesign />} />
                 
-                <Route path="/HumanCulture" element={<HumanCulture />} />
+                <Route path="/humanculture" element={<HumanCulture />} />
                 
-                <Route path="/HumanInsight" element={<HumanInsight />} />
+                <Route path="/humaninsight" element={<HumanInsight />} />
+
+                {/* redirects from legacy capitalized paths */}
+                <Route path="/Home" element={<Navigate to="/home" replace />} />
+                <Route path="/BookDemo" element={<Navigate to="/bookdemo" replace />} />
+                <Route path="/Services" element={<Navigate to="/services" replace />} />
+                <Route path="/About" element={<Navigate to="/about" replace />} />
+                <Route path="/HumanAssist" element={<Navigate to="/humanassist" replace />} />
+                <Route path="/HumanDesign" element={<Navigate to="/humandesign" replace />} />
+                <Route path="/HumanCulture" element={<Navigate to="/humanculture" replace />} />
+                <Route path="/HumanInsight" element={<Navigate to="/humaninsight" replace />} />
+                <Route path="*" element={<Navigate to="/home" replace />} />
                 
             </Routes>
         </Layout>

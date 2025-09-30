@@ -8,6 +8,9 @@ export default defineConfig({
   server: {
     allowedHosts: true
   },
+  build: {
+    outDir: 'dist'
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

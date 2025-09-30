@@ -307,6 +307,7 @@ export default function Layout({ children, currentPageName }) {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 text-slate-200 hover:text-red-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-red-400"
               aria-label="Toggle menu"
+              aria-expanded={isMenuOpen}
             >
               <AnimatePresence mode="wait">
                 <motion.div
